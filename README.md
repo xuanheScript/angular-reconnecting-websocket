@@ -13,4 +13,7 @@ you can replace with:
 
     ws = new ReconnectingWebSocket('ws://....');
 
-Minified library with gzip compression is less than 600 bytes.
+### Forked Features
+
+[Exponential backoff](http://dthain.blogspot.com/2009/02/exponential-backoff-in-distributed.html) with sensible defaults.
+

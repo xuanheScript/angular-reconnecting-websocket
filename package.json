@@ -1,0 +1,11 @@
+{
+  "name": "reconnecting-websocket",
+  "description": "A reconnecting websocket.",
+  "author": "Joe Walnes",
+  "scripts": {
+    "build": "uglifyjs reconnecting-websocket.js -m -o reconnecting-websocket.min.js"
+  },
+  "devDependencies": {
+    "uglify-js": "~2.4.4"
+  }
+}
