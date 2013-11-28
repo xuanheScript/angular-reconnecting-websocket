@@ -100,6 +100,12 @@
       }
     }
 
+    var resetReconnectInterval = function () {
+      dbg('resetting reconnection interval');
+      retries = 0;
+      self.reconnectInterval = self.initialReconnectInterval;
+    }
+
     // modify reconnectInterval in place
     var updateReconnectInterval = function () {
       // http://dthain.blogspot.com/2009/02/exponential-backoff-in-distributed.html
@@ -169,6 +175,9 @@
         // cancel failure to connect timeout
         clearTimeout(timeout);
 
+        // success! reconnection happened, so we cleanup after ourselves
+        resetReconnectInterval();
+
         reconnectAttempt = false;
         self.onopen(event);
       };
@@ -178,7 +187,8 @@
 
         self.readyState = ws.readyState;
 
-        // cancel the local reconnect timeout on a forced close
+        // cancel the local reconnect timeout if socket closed (or failed to
+        // open) before the timeout triggered
         clearTimeout(timeout);
 
         ws = null;
