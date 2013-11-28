@@ -3,7 +3,7 @@
   "description": "A reconnecting websocket.",
   "author": "Joe Walnes",
   "scripts": {
-    "build": "uglifyjs reconnecting-websocket.js -m -o reconnecting-websocket.min.js"
+    "build": "echo '// https://github.com/abachman/reconnecting-websocket' > reconnecting-websocket-min.js ; uglifyjs reconnecting-websocket.js -m >> reconnecting-websocket.min.js"
   },
   "devDependencies": {
     "uglify-js": "~2.4.4"
