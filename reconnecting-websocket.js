@@ -1,25 +1,3 @@
-// MIT License:
-//
-// Copyright (c) 2010-2012, Joe Walnes
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-// THE SOFTWARE.
-
 /**
  * This behaves like a WebSocket in every way, except if it fails to connect,
  * or it gets disconnected, it will repeatedly poll until it succesfully connects
@@ -47,9 +25,7 @@
  * Latest version: https://github.com/joewalnes/reconnecting-websocket/
  * - Joe Walnes
  */
-(function() {
-
-  var root = this;
+function ReconnectingWebSocketProvider($timeout) {
 
   var ReconnectingWebSocket = function (url, protocols) {
     protocols = protocols || [];
@@ -179,7 +155,9 @@
         resetReconnectInterval();
 
         reconnectAttempt = false;
-        self.onopen(event);
+        $timeout(function(){
+          self.onopen(event);
+        });
       };
 
       ws.onclose = function(event) {
@@ -202,16 +180,22 @@
           self.readyState = WebSocket.CONNECTING;
 
           // trigger public onconnecting
-          self.onconnecting();
+          $timeout(function(){
+            self.onconnecting();
+          });
 
           // if this is not a recursive reconnection call or a timeout, trigger public onclose
           if (!(reconnectAttempt || timedOut)) {
             dbg('onclose', url);
-            self.onclose(event);
+            $timeout(function(){
+              self.onclose(event);
+            });
           }
 
           // + 1 to include the original connection
-          self.onreconnect(retries + 1, self.reconnectInterval);
+          $timeout(function(){
+            self.onreconnect(retries + 1, self.reconnectInterval);
+          });
 
           // and attempt a reconnection after reconnectInterval
           reconnectionAttemptTimeout = setTimeout(function() {
@@ -223,13 +207,17 @@
 
       ws.onmessage = function(event) {
         dbg('ws.onmessage', url, event.data);
-        self.onmessage(event);
+        $timeout(function(){
+          self.onmessage(event);
+        });
       };
 
       ws.onerror = function(event) {
         // don't do anything on an error, just report it
         dbg('ws.onerror', url, event);
-        self.onerror(event);
+        $timeout(function(){
+          self.onerror(event);
+        });
       };
     }
 
@@ -260,7 +248,5 @@
       }
     };
   }
-
-  root.ReconnectingWebSocket = ReconnectingWebSocket;
-}).call(this);
-
+  return ReconnectingWebSocket;
+};
