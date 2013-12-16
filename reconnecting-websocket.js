@@ -198,7 +198,7 @@ function ReconnectingWebSocketProvider($timeout) {
           });
 
           // and attempt a reconnection after reconnectInterval
-          reconnectionAttemptTimeout = setTimeout(function() {
+          setTimeout(function() {
             connect(true);
             updateReconnectInterval();
           }, self.reconnectInterval);

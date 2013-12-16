@@ -1,4 +1,4 @@
-/*! angular-reconnecting-websocket - v0.1.0 - 2013-12-13
+/*! angular-reconnecting-websocket - v0.1.0 - 2013-12-16
 MIT License:
 
 Copyright (c) 2010-2012, Joe Walnes
@@ -197,7 +197,7 @@ function ReconnectingWebSocketProvider($timeout) {
           });
 
           // and attempt a reconnection after reconnectInterval
-          reconnectionAttemptTimeout = setTimeout(function() {
+          setTimeout(function() {
             connect(true);
             updateReconnectInterval();
           }, self.reconnectInterval);
