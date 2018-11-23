@@ -1,5 +1,6 @@
 {
   "name": "angular-reconnecting-websocket",
+  "main": "reconnecting-websocket.js",
   "version": "0.1.0",
   "description": "A reconnecting websocket.",
   "author": "Joe Walnes",
